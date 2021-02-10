@@ -752,7 +752,7 @@ text-decoration: underline;
 	width: 70%;
 	max-width: 70%;
 	position: absolute;
-	bottom: 0;
+	bottom: 0 !important;
 	right: 0;
 	display: inline-block;
 }
@@ -762,11 +762,13 @@ text-decoration: underline;
 	font-size: 13px;
 	color: #fff;
 	margin-bottom: 20px;
+	bottom: 0 !important;
 }
 
 .footer .content p a {
 	color: #aaa;
 	text-decoration: none;
+	bottom: 0 !important;
 }
 
 
