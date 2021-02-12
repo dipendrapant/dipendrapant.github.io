@@ -399,7 +399,7 @@ nav a:hover::before {
 	font-weight: 600;
 }
 
-.first-content .main-btn {
+.first-content .main-btn,.first-content .fb-btn {
 	display: inline-block;
 	margin-right: 15px;
 }
