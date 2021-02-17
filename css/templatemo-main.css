@@ -199,6 +199,7 @@ nav .logo {
 nav .logo img {
 	max-width: 100%;
 	overflow-y: hidden;
+	opacity: 0.5;
 }
 
 nav ul {
@@ -289,7 +290,10 @@ nav a:hover::before {
 	.slides .slide .content {
 		overflow-y: scroll !important;
 		left: 30% !important;
-		/* height: 80% !important; */
+	}
+
+	.slides .slide .content .container-fluid .col-md-9 .fb-btn {
+		margin-top: 15px !important;
 	}
 }
 @media (min-width: 769px) {
@@ -392,7 +396,7 @@ nav a:hover::before {
 	color: #000;
 	font-size: 13px;
 	text-transform: uppercase;
-	font-weight: 300;
+	font-weight: 500;
 	letter-spacing: 2px;
 	line-height: 26px;
 	margin-bottom: 20px;
@@ -455,6 +459,13 @@ nav a:hover::before {
 	border-radius: 30px;
 }
 
+#btnMyArticles a:hover {
+	background: #f54642;
+	color: #232323 !important;
+	box-shadow: rgb(0 0 0 / 20%) 0px 5px 10px;
+	border-radius: 30px;
+}
+
 .first-content .fb-btn a:hover {
 	color: #fff;
 	background-color: transparent;
@@ -501,7 +512,7 @@ nav a:hover::before {
 	font-size: 13px;
 	color: #000;
 	letter-spacing: 0.5px;
-	font-weight: 300;
+	font-weight: 500;
 	line-height: 24px;
 	margin-bottom: 30px;
 }
@@ -754,7 +765,7 @@ nav a:hover::before {
 	font-size: 13px;
 	text-transform: uppercase;
 	letter-spacing: 1px;
-	color: #000;
+	color: #585858;
 	text-decoration: underline;
 }
 
@@ -766,7 +777,8 @@ nav a:hover::before {
 #contact .row fieldset label:nth-child(2) {
 	padding-top: 0px;
 	text-decoration: none;
-	color: rgb(10, 245, 147);
+	color: #000;
+	font-weight: 700;
 }
 .fifth-content button:hover {
 	color: #232323;
@@ -798,6 +810,11 @@ nav a:hover::before {
 }
 
 /* REPONSIVE */
+@media (max-width: 1024px) and (min-width: 768px) {
+	#fb-btn-stackoverflow {
+		margin-top: 1.5rem;
+	}
+}
 
 @media (max-width: 991px) {
 	nav ul {
@@ -908,6 +925,10 @@ nav a:hover::before {
 }
 
 @media (max-width: 450px) {
+	.first-content .main-btn {
+		margin-bottom: 0px;
+	}
+
 	nav ul {
 		margin-top: 30px;
 	}
