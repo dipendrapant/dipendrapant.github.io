@@ -516,7 +516,11 @@ nav a:hover::before {
 	letter-spacing: 0.5px;
 	font-weight: 500;
 	line-height: 24px;
-	margin-bottom: 30px;
+	margin-bottom: 4px;
+}
+
+#btnMyArticles{
+	text-align: right;
 }
 
 .second-content a {
