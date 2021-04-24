@@ -554,6 +554,10 @@ nav a:hover::before {
 	margin-top: 12px;
 }
 
+.first-content .left-content{
+	text-align: justify;
+}
+
 .third-content .first-section .right-image {
 	margin-left: 15px;
 }
@@ -909,6 +913,9 @@ nav a:hover::before {
 	.second-content .left-content {
 		padding: 30px;
 		text-align: left;
+	}
+	.second-content .left-content  p{
+		text-align: justify;
 	}
 
 	.fourth-content .item .hover-effect h2 {
