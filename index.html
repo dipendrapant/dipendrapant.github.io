@@ -360,7 +360,7 @@
         width: 64px;
         height: 90px;
         z-index: 3;
-        animation: walkRoad 16s ease-in-out infinite;
+        opacity: 0;
       }
 
       .person {
@@ -368,7 +368,6 @@
         width: 100%;
         height: 100%;
         transform-origin: bottom center;
-        animation: growPerson 16s steps(6, end) infinite;
       }
 
       .head,
@@ -422,7 +421,6 @@
         background: var(--sky);
         border: 2px solid #245b73;
         border-radius: 13px 13px 9px 9px;
-        animation: outfit 16s steps(6, end) infinite;
       }
 
       .arm {
@@ -432,7 +430,6 @@
         height: 7px;
         background: #6b442d;
         border-radius: 999px;
-        animation: armWave 760ms ease-in-out infinite alternate;
       }
 
       .arm.left {
@@ -511,15 +508,37 @@
         scroll-snap-align: center;
         opacity: 0;
         transform: translateY(10px) scale(0.94);
-        animation-duration: 16s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
+      }
+
+      .step:not(.continued-step)::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 76px;
+        width: 2px;
+        height: 28px;
+        background: var(--blue);
+        border-radius: 999px;
+        transform: translateX(-50%);
+      }
+
+      .step:not(.continued-step)::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 103px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 8px solid var(--blue);
+        transform: translateX(-50%);
       }
 
       .checkpoint {
         display: grid;
-        width: 62px;
-        min-height: 62px;
+        width: 40px;
+        min-height: 40px;
         place-items: center;
         padding: 9px;
         color: #fff;
@@ -558,6 +577,29 @@
       }
       .step:nth-of-type(7) {
         animation-name: revealStepSeven;
+      }
+
+      .timeline-road.is-animating .walker {
+        animation: walkRoad 16s ease-in-out forwards;
+      }
+
+      .timeline-road.is-animating .person {
+        animation: growPerson 16s steps(6, end) forwards;
+      }
+
+      .timeline-road.is-animating .body {
+        animation: outfit 16s steps(6, end) forwards;
+      }
+
+      .timeline-road.is-animating .arm {
+        animation: armWave 760ms ease-in-out 21 alternate;
+      }
+
+      .timeline-road.is-animating .step {
+        animation-duration: 16s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
       }
 
       .step h3 {
@@ -1079,7 +1121,7 @@
         }
         100% {
           opacity: 0;
-          left: 4%;
+          left: calc(100% + 96px);
         }
       }
 
@@ -1144,13 +1186,12 @@
 
       @keyframes revealStepOne {
         0%,
-        7%,
-        100% {
+        7% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         8%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1158,13 +1199,12 @@
 
       @keyframes revealStepTwo {
         0%,
-        23%,
-        100% {
+        23% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         24%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1172,13 +1212,12 @@
 
       @keyframes revealStepThree {
         0%,
-        39%,
-        100% {
+        39% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         40%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1186,13 +1225,12 @@
 
       @keyframes revealStepFour {
         0%,
-        55%,
-        100% {
+        55% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         56%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1200,13 +1238,12 @@
 
       @keyframes revealStepFive {
         0%,
-        71%,
-        100% {
+        71% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         72%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1214,13 +1251,12 @@
 
       @keyframes revealStepSix {
         0%,
-        87%,
-        100% {
+        87% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         88%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1228,13 +1264,12 @@
 
       @keyframes revealStepSeven {
         0%,
-        95%,
-        100% {
+        95% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
         96%,
-        99% {
+        100% {
           opacity: 1;
           transform: translateY(0) scale(1);
         }
@@ -1373,6 +1408,18 @@
           gap: 4px;
         }
 
+        .step:not(.continued-step)::after {
+          top: 51px;
+          height: 22px;
+        }
+
+        .step:not(.continued-step)::before {
+          top: 72px;
+          border-left-width: 4px;
+          border-right-width: 4px;
+          border-top-width: 7px;
+        }
+
         .game-arena {
           min-height: 430px;
         }
@@ -1466,7 +1513,13 @@
                 target="_blank"
                 rel="noopener"
                 aria-label="Medium"
-                ><i class="fa fa-medium" aria-hidden="true"></i
+                ><svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 1043.63 592.71"
+                >
+                  <path
+                    d="M588.67 296.36c0 163.67-131.78 296.35-294.33 296.35S0 460 0 296.36 131.78 0 294.34 0s294.33 132.69 294.33 296.36m322.89 0c0 154.06-65.89 279-147.17 279s-147.17-124.94-147.17-279 65.88-279 147.16-279 147.17 124.9 147.17 279m132.08 0c0 138-23.17 249.94-51.76 249.94s-51.75-111.91-51.75-249.94 23.17-249.94 51.75-249.94 51.76 111.9 51.76 249.94"
+                  /></svg
               ></a>
               <a
                 class="huggingface"
@@ -1474,9 +1527,8 @@
                 target="_blank"
                 rel="noopener"
                 aria-label="Hugging Face"
-                ><span class="hf-icon" aria-hidden="true"
-                  ><span class="hf-mouth"></span></span
-              ></a>
+                ><span>🤗</span></a
+              >
             </div>
             <p class="intro">
               I am a <strong>PhD Candidate</strong> at NTNU, IDI, Trondheim,
@@ -1576,9 +1628,27 @@
                     Analysis of Electronic Health Records</a
                   >
                 </h3>
-                <p class="meta">JMIR Medical Informatics · 2026</p>
+                <p class="meta">JMIR Medical Informatics (I.F=5), 2026</p>
               </div>
             </article>
+            <article class="work-card">
+              <img
+                src="img/dipendra_pant_article2.png"
+                alt="Research visuals preview"
+              />
+              <div>
+                <h3>
+                  <a
+                    href="https://www.nature.com/articles/s41746-026-02784-2"
+                    aria-label="Add article URL here"
+                    >Guideline for secondary use of health records within
+                    Norwegian and EU regulatory frameworks</a
+                  >
+                </h3>
+                <p class="meta">npj Digital Medicine (I.F=18), 2026</p>
+              </div>
+            </article>
+
             <article class="work-card">
               <img src="img/dipendra_pant_book.jpg" alt="Book cover preview" />
               <div>
@@ -1604,36 +1674,36 @@
           <div class="photo-grid">
             <figure class="photo-card">
               <img
-                src="img/dipendra_pant_aboutme.jpg"
+                src="img/places_have_been/11_UW_US.jpg"
                 alt="Dipendra Pant outdoors"
               />
               <figcaption>
-                A good picture sometimes in 2020, i look lovely.
+                In 2026 at University of Washington for a week.
               </figcaption>
             </figure>
             <figure class="photo-card">
-              <div
-                class="photo-placeholder"
-                role="img"
-                aria-label="Travel photo placeholder"
-              ></div>
-              <figcaption>Add place name and caption here.</figcaption>
+              <img
+                src="img/places_have_been/12.jpg"
+                alt="With Peter Szolovits and Tom Pollard from MIT"
+              />
+              <figcaption>
+                With Prof. Peter Szolovits and Tom Pollard from MIT,
+                Massachusetts
+              </figcaption>
             </figure>
             <figure class="photo-card">
-              <div
-                class="photo-placeholder"
-                role="img"
-                aria-label="Travel photo placeholder"
-              ></div>
-              <figcaption>Add place name and caption here.</figcaption>
+              <img
+                src="img/places_have_been/5_AIME_Utah.jpg"
+                alt="At AIME 2024 conference in Utah, USA"
+              />
+              <figcaption>At AIME 2024 conference in Utah, USA</figcaption>
             </figure>
             <figure class="photo-card">
-              <div
-                class="photo-placeholder"
-                role="img"
-                aria-label="Travel photo placeholder"
-              ></div>
-              <figcaption>Add place name and caption here.</figcaption>
+              <img
+                src="img/places_have_been/7_BIBM_Lisbo.jpg"
+                alt="At BIBM 2024 conference, Lisbon, Portugal"
+              />
+              <figcaption>At BIBM 2024 conference, Lisbon, Portugal</figcaption>
             </figure>
           </div>
         </section>
@@ -1841,6 +1911,7 @@
       const resetGame = document.getElementById("resetGame");
       const homeLinks = document.querySelectorAll(".js-home-link");
       const gameLink = document.querySelector(".js-game-link");
+      const timelineRoad = document.querySelector(".timeline-road");
       let score = 0;
       let termIndex = 0;
       let birdX = 40;
@@ -1879,6 +1950,18 @@
         setActiveLink(gameLink);
         window.scrollTo({ top: 0, behavior: "smooth" });
         window.setTimeout(moveBird, 0);
+      }
+
+      function playTimelineOnce() {
+        if (!timelineRoad) return;
+        timelineRoad.classList.remove("is-animating");
+        void timelineRoad.offsetWidth;
+        timelineRoad.classList.add("is-animating");
+      }
+
+      function resetTimelineAnimation() {
+        if (!timelineRoad) return;
+        timelineRoad.classList.remove("is-animating");
       }
 
       function moveBird() {
@@ -1967,6 +2050,24 @@
         showGame();
         history.replaceState(null, "", "#game");
       });
+
+      if ("IntersectionObserver" in window && timelineRoad) {
+        const timelineObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                playTimelineOnce();
+              } else {
+                resetTimelineAnimation();
+              }
+            });
+          },
+          { threshold: 0.45 }
+        );
+        timelineObserver.observe(timelineRoad);
+      } else {
+        playTimelineOnce();
+      }
 
       window.addEventListener("resize", moveBird);
       if (window.location.hash === "#game") {
