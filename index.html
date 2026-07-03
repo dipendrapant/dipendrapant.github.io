@@ -327,7 +327,7 @@
         content: "";
         position: absolute;
         left: 36px;
-        right: -96px;
+        right: 36px;
         top: 194px;
         height: 28px;
         border-radius: 999px;
@@ -340,27 +340,15 @@
         box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.08);
       }
 
-      .timeline-road::after {
-        content: "";
-        position: absolute;
-        right: -120px;
-        top: 179px;
-        width: 0;
-        height: 0;
-        border-top: 29px solid transparent;
-        border-bottom: 29px solid transparent;
-        border-left: 44px solid #67747c;
-        filter: drop-shadow(0 3px 0 rgba(0, 0, 0, 0.12));
-      }
-
       .walker {
         position: absolute;
-        left: 28px;
+        left: 7.14%;
         top: 100px;
         width: 64px;
         height: 90px;
         z-index: 3;
         opacity: 0;
+        transform: translateX(-50%);
       }
 
       .person {
@@ -501,41 +489,20 @@
 
       .step {
         position: relative;
-        display: flex;
-        align-items: center;
+        display: grid;
+        grid-template-rows: auto auto;
+        align-content: end;
+        justify-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
+        min-height: 74px;
         scroll-snap-align: center;
         opacity: 0;
         transform: translateY(10px) scale(0.94);
       }
 
-      .step:not(.continued-step)::after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 76px;
-        width: 2px;
-        height: 28px;
-        background: var(--blue);
-        border-radius: 999px;
-        transform: translateX(-50%);
-      }
-
-      .step:not(.continued-step)::before {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 103px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 8px solid var(--blue);
-        transform: translateX(-50%);
-      }
-
       .checkpoint {
+        grid-row: 2;
         display: grid;
         width: 40px;
         min-height: 40px;
@@ -603,13 +570,15 @@
       }
 
       .step h3 {
+        grid-row: 1;
         margin: 0;
-        max-width: 110px;
+        max-width: 118px;
         font-size: clamp(13px, 1.7vw, 17px);
         font-weight: 800;
         line-height: 1.2;
-        text-align: left;
-        overflow-wrap: anywhere;
+        text-align: center;
+        overflow-wrap: normal;
+        word-break: normal;
       }
 
       .step-year {
@@ -623,7 +592,7 @@
 
       .continued-step {
         justify-content: center;
-        padding-top: 14px;
+        align-content: center;
       }
 
       .continued-step h3 {
@@ -1084,34 +1053,39 @@
         0%,
         8% {
           opacity: 1;
-          left: 4%;
+          left: 7.14%;
         }
-        18%,
-        24% {
+        20%,
+        23% {
           opacity: 1;
-          left: 20%;
+          left: 21.43%;
         }
-        34%,
-        40% {
+        35%,
+        38% {
           opacity: 1;
-          left: 36%;
+          left: 35.71%;
         }
         50%,
-        56% {
+        53% {
           opacity: 1;
-          left: 52%;
+          left: 50%;
         }
-        66%,
-        72% {
+        65%,
+        68% {
           opacity: 1;
-          left: 68%;
+          left: 64.29%;
         }
-        82%,
-        88% {
+        80%,
+        83% {
           opacity: 1;
-          left: 84%;
+          left: 78.57%;
         }
+        95%,
         96% {
+          opacity: 1;
+          left: 92.86%;
+        }
+        98% {
           opacity: 1;
           left: calc(100% + 36px);
         }
@@ -1199,11 +1173,11 @@
 
       @keyframes revealStepTwo {
         0%,
-        23% {
+        22% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
-        24%,
+        23%,
         100% {
           opacity: 1;
           transform: translateY(0) scale(1);
@@ -1212,11 +1186,11 @@
 
       @keyframes revealStepThree {
         0%,
-        39% {
+        37% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
-        40%,
+        38%,
         100% {
           opacity: 1;
           transform: translateY(0) scale(1);
@@ -1225,11 +1199,11 @@
 
       @keyframes revealStepFour {
         0%,
-        55% {
+        52% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
-        56%,
+        53%,
         100% {
           opacity: 1;
           transform: translateY(0) scale(1);
@@ -1238,11 +1212,11 @@
 
       @keyframes revealStepFive {
         0%,
-        71% {
+        67% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
-        72%,
+        68%,
         100% {
           opacity: 1;
           transform: translateY(0) scale(1);
@@ -1251,11 +1225,11 @@
 
       @keyframes revealStepSix {
         0%,
-        87% {
+        82% {
           opacity: 0;
           transform: translateY(10px) scale(0.94);
         }
-        88%,
+        83%,
         100% {
           opacity: 1;
           transform: translateY(0) scale(1);
@@ -1362,62 +1336,56 @@
         }
 
         .timeline-road {
-          padding: 92px 0 34px;
+          padding: 74px 0 24px;
+          min-width: 0;
         }
 
         .timeline-road::before {
-          left: 24px;
-          right: -60px;
-          top: 153px;
-          height: 20px;
+          left: 12px;
+          right: 12px;
+          top: 126px;
+          height: 14px;
         }
 
-        .timeline-road::after {
-          right: -78px;
-          top: 141px;
-          border-top-width: 22px;
-          border-bottom-width: 22px;
-          border-left-width: 32px;
+        .timeline-wrap {
+          overflow-x: hidden;
+          overflow-y: hidden;
+          padding-bottom: 8px;
+          scroll-snap-type: none;
         }
 
         .walker {
-          top: 70px;
-          width: 50px;
-          height: 74px;
+          top: 64px;
+          width: 34px;
+          height: 50px;
         }
 
         .checkpoint {
-          width: 42px;
-          min-height: 42px;
-          padding: 8px;
+          width: 25px;
+          min-height: 25px;
+          padding: 5px;
           border-width: 2px;
-          font-size: 14px;
-        }
-
-        .step h3 {
-          max-width: 54px;
-          font-size: 11px;
-          text-align: left;
-        }
-
-        .step-year {
           font-size: 10px;
         }
 
+        .step h3 {
+          max-width: 42px;
+          font-size: 8px;
+          line-height: 1.05;
+          text-align: center;
+          overflow-wrap: normal;
+          word-break: normal;
+        }
+
+        .step-year {
+          margin-top: 1px;
+          font-size: 7px;
+        }
+
         .step {
-          gap: 4px;
-        }
-
-        .step:not(.continued-step)::after {
-          top: 51px;
-          height: 22px;
-        }
-
-        .step:not(.continued-step)::before {
-          top: 72px;
-          border-left-width: 4px;
-          border-right-width: 4px;
-          border-top-width: 7px;
+          gap: 2px;
+          min-width: 0;
+          min-height: 51px;
         }
 
         .game-arena {
@@ -1425,19 +1393,81 @@
         }
 
         .arena-word {
-          top: 78px;
-          width: 92%;
+          top: 70px;
+          width: min(70%, 260px);
+          padding: 9px 10px;
+        }
+
+        .arena-word strong {
+          font-size: clamp(15px, 5vw, 20px);
+        }
+
+        .arena-word span {
+          margin-top: 3px;
+          font-size: clamp(11px, 3.5vw, 13px);
+          line-height: 1.45;
         }
 
         .game-score {
-          min-width: 104px;
-          font-size: 15px;
+          min-height: 36px;
+          min-width: 86px;
+          padding: 7px 9px;
+          font-size: 13px;
         }
 
         .game-controls {
           top: 14px;
           right: 14px;
           gap: 8px;
+        }
+
+        .game-controls .button {
+          min-height: 36px;
+          padding: 7px 10px;
+          font-size: 13px;
+        }
+
+        .bird {
+          width: 96px;
+          height: 82px;
+        }
+
+        .bird-art {
+          inset: auto;
+          left: 50%;
+          top: 50%;
+          width: 142px;
+          height: 120px;
+          scale: 0.58;
+          transform: translate(-50%, -50%);
+        }
+
+        .bird.facing-left .bird-art {
+          transform: translate(-50%, -50%) scaleX(-1);
+        }
+      }
+
+      @media (max-width: 380px) {
+        .arena-word {
+          width: min(66%, 230px);
+          padding: 8px 9px;
+        }
+
+        .arena-word strong {
+          font-size: 15px;
+        }
+
+        .arena-word span {
+          font-size: 11px;
+        }
+
+        .bird {
+          width: 86px;
+          height: 74px;
+        }
+
+        .bird-art {
+          scale: 0.52;
         }
       }
 
@@ -1920,12 +1950,24 @@
       let velocityY = 1.4;
       let lastFrame = 0;
       let birdFacingLeft = false;
+      let gameCompleted = false;
+      let completionTimer = null;
 
       function showTerm() {
-        const term = terms[termIndex % terms.length];
+        const term = terms[termIndex];
         screenWordEl.textContent = term[0];
         screenMeaningEl.textContent = term[1];
         termIndex += 1;
+      }
+
+      function completeGame() {
+        gameCompleted = true;
+        bird.disabled = true;
+        screenWordEl.textContent = "Game completed!";
+        screenMeaningEl.textContent = `You collected all ${
+          terms.length
+        } words. Final score: ${terms.length * 10}. Resetting...`;
+        completionTimer = window.setTimeout(resetGameState, 2200);
       }
 
       function setActiveLink(activeLink) {
@@ -2011,18 +2053,13 @@
         window.setTimeout(() => marker.remove(), 800);
       }
 
-      bird.addEventListener("click", (event) => {
-        const arenaBox = arena.getBoundingClientRect();
-        score += 10;
-        scoreEl.textContent = score;
-        showTerm();
-        showHit(event.clientX - arenaBox.left, event.clientY - arenaBox.top);
-        velocityX = (velocityX > 0 ? 1 : -1) * (2.1 + Math.random() * 1.4);
-        velocityY = (velocityY > 0 ? 1 : -1) * (1.4 + Math.random() * 1.1);
-        birdFacingLeft = velocityX < 0;
-      });
-
-      resetGame.addEventListener("click", () => {
+      function resetGameState() {
+        if (completionTimer) {
+          window.clearTimeout(completionTimer);
+          completionTimer = null;
+        }
+        gameCompleted = false;
+        bird.disabled = false;
         score = 0;
         termIndex = 0;
         scoreEl.textContent = score;
@@ -2035,6 +2072,31 @@
         velocityY = 1.4;
         birdFacingLeft = false;
         moveBird();
+      }
+
+      bird.addEventListener("click", (event) => {
+        if (gameCompleted || termIndex >= terms.length) {
+          return;
+        }
+
+        const arenaBox = arena.getBoundingClientRect();
+        showTerm();
+        score = termIndex * 10;
+        scoreEl.textContent = score;
+        showHit(event.clientX - arenaBox.left, event.clientY - arenaBox.top);
+
+        if (termIndex >= terms.length) {
+          completionTimer = window.setTimeout(completeGame, 650);
+          return;
+        }
+
+        velocityX = (velocityX > 0 ? 1 : -1) * (2.1 + Math.random() * 1.4);
+        velocityY = (velocityY > 0 ? 1 : -1) * (1.4 + Math.random() * 1.1);
+        birdFacingLeft = velocityX < 0;
+      });
+
+      resetGame.addEventListener("click", () => {
+        resetGameState();
       });
 
       homeLinks.forEach((link) => {
