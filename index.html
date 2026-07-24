@@ -45,6 +45,10 @@
         overflow-x: hidden;
       }
 
+      body.modal-open {
+        overflow: hidden;
+      }
+
       a {
         color: var(--blue);
         text-decoration: none;
@@ -338,6 +342,7 @@
           ),
           linear-gradient(90deg, #4f5960, #67747c);
         box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.08);
+        opacity: 0.42;
       }
 
       .walker {
@@ -356,6 +361,24 @@
         width: 100%;
         height: 100%;
         transform-origin: bottom center;
+      }
+
+      .timeline-person {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center bottom;
+        opacity: 0;
+        user-select: none;
+        pointer-events: none;
+        filter: drop-shadow(0 8px 10px rgba(28, 45, 58, 0.22));
+      }
+
+      .timeline-person.stage-a {
+        opacity: 1;
       }
 
       .head,
@@ -514,6 +537,7 @@
         border-radius: 50%;
         box-shadow: var(--shadow);
         font-size: 19px;
+        opacity: 0.58;
       }
 
       .step:nth-of-type(2n) .checkpoint {
@@ -554,6 +578,26 @@
         animation: growPerson 16s steps(6, end) forwards;
       }
 
+      .timeline-road.is-animating .timeline-person.stage-a {
+        animation: showTimelineStageA 16s linear forwards;
+      }
+
+      .timeline-road.is-animating .timeline-person.stage-b {
+        animation: showTimelineStageB 16s linear forwards;
+      }
+
+      .timeline-road.is-animating .timeline-person.stage-c {
+        animation: showTimelineStageC 16s linear forwards;
+      }
+
+      .timeline-road.is-animating .timeline-person.stage-d {
+        animation: showTimelineStageD 16s linear forwards;
+      }
+
+      .timeline-road.is-animating .timeline-person.stage-e {
+        animation: showTimelineStageE 16s linear forwards;
+      }
+
       .timeline-road.is-animating .body {
         animation: outfit 16s steps(6, end) forwards;
       }
@@ -579,6 +623,7 @@
         text-align: center;
         overflow-wrap: normal;
         word-break: normal;
+        opacity: 0.62;
       }
 
       .step-year {
@@ -597,7 +642,7 @@
 
       .continued-step h3 {
         max-width: 130px;
-        color: var(--green);
+        color: inherit;
         font-style: italic;
         text-align: center;
       }
@@ -671,6 +716,19 @@
         border: 1px solid var(--line);
         border-radius: 8px;
         box-shadow: 0 12px 32px rgba(28, 45, 58, 0.08);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .photo-card:hover,
+      .photo-card:focus-visible {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 42px rgba(28, 45, 58, 0.14);
+      }
+
+      .photo-card:focus-visible {
+        outline: 3px solid rgba(0, 114, 178, 0.45);
+        outline-offset: 4px;
       }
 
       .photo-card img,
@@ -692,6 +750,81 @@
         padding: 13px 15px;
         color: var(--muted);
         font-size: clamp(13px, 1.5vw, 15px);
+      }
+
+      .photo-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(18px, 4vw, 44px);
+        background: rgba(20, 28, 34, 0.86);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+
+      .photo-lightbox.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .photo-lightbox-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        width: min(100%, 1100px);
+        max-height: calc(100vh - 48px);
+      }
+
+      .photo-lightbox img {
+        display: block;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: min(82vh, 760px);
+        object-fit: contain;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      }
+
+      .photo-lightbox-caption {
+        max-width: 900px;
+        margin: 0;
+        color: #fff;
+        font-size: clamp(14px, 1.8vw, 17px);
+        text-align: center;
+      }
+
+      .photo-lightbox-close {
+        position: absolute;
+        top: -18px;
+        right: -18px;
+        z-index: 1;
+        width: 44px;
+        height: 44px;
+        color: var(--ink);
+        background: #fff;
+        border: 0;
+        border-radius: 50%;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        font-size: 34px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .photo-lightbox-close:hover,
+      .photo-lightbox-close:focus-visible {
+        color: #fff;
+        background: var(--blue);
+        outline: none;
       }
 
       .game-section {
@@ -1123,6 +1256,73 @@
         81%,
         100% {
           transform: scale(1.14);
+        }
+      }
+
+      @keyframes showTimelineStageA {
+        0%,
+        23% {
+          opacity: 1;
+        }
+        23.01%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes showTimelineStageB {
+        0%,
+        22.99% {
+          opacity: 0;
+        }
+        23%,
+        38% {
+          opacity: 1;
+        }
+        38.01%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes showTimelineStageC {
+        0%,
+        37.99% {
+          opacity: 0;
+        }
+        38%,
+        53% {
+          opacity: 1;
+        }
+        53.01%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes showTimelineStageD {
+        0%,
+        52.99% {
+          opacity: 0;
+        }
+        53%,
+        68% {
+          opacity: 1;
+        }
+        68.01%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes showTimelineStageE {
+        0%,
+        67.99% {
+          opacity: 0;
+        }
+        68%,
+        100% {
+          opacity: 1;
         }
       }
 
@@ -1582,16 +1782,31 @@
             <div class="timeline-road">
               <div class="walker" aria-hidden="true">
                 <div class="person">
-                  <span class="head"
-                    ><span class="face-eye left"></span
-                    ><span class="face-eye right"></span
-                    ><span class="face-smile"></span
-                  ></span>
-                  <span class="body"></span>
-                  <span class="arm left"><span class="hand"></span></span>
-                  <span class="arm right"><span class="hand"></span></span>
-                  <span class="leg left"></span>
-                  <span class="leg right"></span>
+                  <img
+                    class="timeline-person stage-a"
+                    src="img/timeline/a-removebg-preview.png"
+                    alt=""
+                  />
+                  <img
+                    class="timeline-person stage-b"
+                    src="img/timeline/b-removebg-preview.png"
+                    alt=""
+                  />
+                  <img
+                    class="timeline-person stage-c"
+                    src="img/timeline/c-removebg-preview.png"
+                    alt=""
+                  />
+                  <img
+                    class="timeline-person stage-d"
+                    src="img/timeline/d-removebg-preview.png"
+                    alt=""
+                  />
+                  <img
+                    class="timeline-person stage-e"
+                    src="img/timeline/e-removebg-preview.png"
+                    alt=""
+                  />
                 </div>
               </div>
               <article class="step">
@@ -1735,8 +1950,36 @@
               />
               <figcaption>At BIBM 2024 conference, Lisbon, Portugal</figcaption>
             </figure>
+            <figure class="photo-card">
+              <img
+                src="img/places_have_been/Dipendra_Pant_With_Sher_Bahadur_2022.jpg"
+                alt="At KU, 2022 for Gold Medal"
+              />
+              <figcaption>
+                Receiving Gold Medal Recipient (2022) from Right Honorable Prime
+                Minister of Nepal at Kathmandu University.
+              </figcaption>
+            </figure>
           </div>
         </section>
+        <div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+          <div
+            class="photo-lightbox-content"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Full size photo"
+          >
+            <button
+              class="photo-lightbox-close"
+              type="button"
+              aria-label="Close full image"
+            >
+              &times;
+            </button>
+            <img id="photoLightboxImage" src="" alt="" />
+            <p class="photo-lightbox-caption" id="photoLightboxCaption"></p>
+          </div>
+        </div>
       </div>
 
       <section class="game-section game-page" id="game">
@@ -1942,6 +2185,15 @@
       const homeLinks = document.querySelectorAll(".js-home-link");
       const gameLink = document.querySelector(".js-game-link");
       const timelineRoad = document.querySelector(".timeline-road");
+      const photoCards = document.querySelectorAll(".photo-card");
+      const photoLightbox = document.getElementById("photoLightbox");
+      const photoLightboxImage = document.getElementById("photoLightboxImage");
+      const photoLightboxCaption = document.getElementById(
+        "photoLightboxCaption"
+      );
+      const photoLightboxClose = document.querySelector(
+        ".photo-lightbox-close"
+      );
       let score = 0;
       let termIndex = 0;
       let birdX = 40;
@@ -1952,6 +2204,7 @@
       let birdFacingLeft = false;
       let gameCompleted = false;
       let completionTimer = null;
+      let lastFocusedPhotoCard = null;
 
       function showTerm() {
         const term = terms[termIndex];
@@ -2004,6 +2257,47 @@
       function resetTimelineAnimation() {
         if (!timelineRoad) return;
         timelineRoad.classList.remove("is-animating");
+      }
+
+      function cleanPhotoText(text) {
+        return text.replace(/\s+/g, " ").trim();
+      }
+
+      function openPhotoLightbox(card) {
+        if (!photoLightbox || !photoLightboxImage || !card) return;
+
+        const image = card.querySelector("img");
+        const caption = card.querySelector("figcaption");
+        if (!image) return;
+
+        lastFocusedPhotoCard = card;
+        photoLightboxImage.src = image.currentSrc || image.src;
+        photoLightboxImage.alt = image.alt || "";
+        photoLightboxCaption.textContent = caption
+          ? cleanPhotoText(caption.textContent)
+          : image.alt || "";
+        photoLightbox.classList.add("is-open");
+        photoLightbox.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        if (photoLightboxClose) {
+          photoLightboxClose.focus();
+        }
+      }
+
+      function closePhotoLightbox() {
+        if (!photoLightbox || !photoLightboxImage) return;
+
+        photoLightbox.classList.remove("is-open");
+        photoLightbox.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+        photoLightboxImage.src = "";
+        photoLightboxImage.alt = "";
+        photoLightboxCaption.textContent = "";
+
+        if (lastFocusedPhotoCard) {
+          lastFocusedPhotoCard.focus();
+        }
       }
 
       function moveBird() {
@@ -2098,6 +2392,43 @@
       resetGame.addEventListener("click", () => {
         resetGameState();
       });
+
+      photoCards.forEach((card) => {
+        const image = card.querySelector("img");
+        const caption = card.querySelector("figcaption");
+        const label = caption
+          ? cleanPhotoText(caption.textContent)
+          : image?.alt || "photo";
+
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-label", `View full image: ${label}`);
+
+        card.addEventListener("click", () => openPhotoLightbox(card));
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openPhotoLightbox(card);
+          }
+        });
+      });
+
+      if (photoLightbox && photoLightboxClose) {
+        photoLightboxClose.addEventListener("click", closePhotoLightbox);
+        photoLightbox.addEventListener("click", (event) => {
+          if (event.target === photoLightbox) {
+            closePhotoLightbox();
+          }
+        });
+        document.addEventListener("keydown", (event) => {
+          if (
+            event.key === "Escape" &&
+            photoLightbox.classList.contains("is-open")
+          ) {
+            closePhotoLightbox();
+          }
+        });
+      }
 
       homeLinks.forEach((link) => {
         link.addEventListener("click", (event) => {
