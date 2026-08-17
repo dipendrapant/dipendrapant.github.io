@@ -21,6 +21,7 @@
         --orange: #e69f00;
         --green: #009e73;
         --rose: #cc79a7;
+        --eraser-overlay: rgba(217, 222, 226, 0.82);
         --shadow: 0 18px 50px rgba(28, 45, 58, 0.12);
       }
 
@@ -114,6 +115,30 @@
       body.show-game .game-page {
         display: block;
         min-height: calc(100vh - 142px);
+      }
+
+      .home-page {
+        position: relative;
+        isolation: isolate;
+        background: var(--paper);
+      }
+
+      .home-eraser-canvas {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .home-page > section {
+        position: relative;
+      }
+
+      .home-page > section > * {
+        position: relative;
+        z-index: 2;
       }
 
       .hero {
@@ -1695,6 +1720,11 @@
 
     <main>
       <div class="home-page" id="homePage">
+        <canvas
+          class="home-eraser-canvas"
+          id="homeEraserCanvas"
+          aria-hidden="true"
+        ></canvas>
         <section class="hero" id="home">
           <div class="hero-inner">
             <img
@@ -2178,6 +2208,11 @@
       const screenWordEl = document.getElementById("screenWord");
       const screenMeaningEl = document.getElementById("screenMeaning");
       const resetGame = document.getElementById("resetGame");
+      const homePage = document.getElementById("homePage");
+      const homeEraserCanvas = document.getElementById("homeEraserCanvas");
+      const homeEraserContext = homeEraserCanvas
+        ? homeEraserCanvas.getContext("2d")
+        : null;
       const homeLinks = document.querySelectorAll(".js-home-link");
       const gameLink = document.querySelector(".js-game-link");
       const timelineRoad = document.querySelector(".timeline-road");
@@ -2201,6 +2236,119 @@
       let gameCompleted = false;
       let completionTimer = null;
       let lastFocusedPhotoCard = null;
+      let lastEraserPoint = null;
+      let eraserResizeFrame = null;
+
+      function paintHomeEraserLayer() {
+        if (!homePage || !homeEraserCanvas || !homeEraserContext) return;
+
+        const width = Math.max(1, homePage.clientWidth);
+        const height = Math.max(1, homePage.scrollHeight);
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        homeEraserCanvas.width = Math.ceil(width * pixelRatio);
+        homeEraserCanvas.height = Math.ceil(height * pixelRatio);
+        homeEraserCanvas.style.height = `${height}px`;
+        homeEraserContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+        homeEraserContext.clearRect(0, 0, width, height);
+
+        const overlayColor =
+          getComputedStyle(document.documentElement)
+            .getPropertyValue("--eraser-overlay")
+            .trim() || "rgba(217, 222, 226, 0.82)";
+        homeEraserContext.fillStyle = overlayColor;
+        homeEraserContext.fillRect(0, 0, width, height);
+        lastEraserPoint = null;
+      }
+
+      function scheduleHomeEraserResize() {
+        if (eraserResizeFrame) {
+          window.cancelAnimationFrame(eraserResizeFrame);
+        }
+        eraserResizeFrame = window.requestAnimationFrame(() => {
+          eraserResizeFrame = null;
+          paintHomeEraserLayer();
+        });
+      }
+
+      function eraseHomePoint(point, radius) {
+        const gradient = homeEraserContext.createRadialGradient(
+          point.x,
+          point.y,
+          radius * 0.52,
+          point.x,
+          point.y,
+          radius
+        );
+        gradient.addColorStop(0, "rgba(0, 0, 0, 1)");
+        gradient.addColorStop(0.72, "rgba(0, 0, 0, 1)");
+        gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+        homeEraserContext.fillStyle = gradient;
+        homeEraserContext.beginPath();
+        homeEraserContext.arc(point.x, point.y, radius, 0, Math.PI * 2);
+        homeEraserContext.fill();
+      }
+
+      function eraseHomeTrail(fromPoint, toPoint, radius) {
+        if (!homeEraserContext) return;
+
+        homeEraserContext.save();
+        homeEraserContext.globalCompositeOperation = "destination-out";
+
+        if (fromPoint) {
+          homeEraserContext.beginPath();
+          homeEraserContext.moveTo(fromPoint.x, fromPoint.y);
+          homeEraserContext.lineTo(toPoint.x, toPoint.y);
+          homeEraserContext.lineWidth = radius * 1.45;
+          homeEraserContext.lineCap = "round";
+          homeEraserContext.lineJoin = "round";
+          homeEraserContext.strokeStyle = "rgba(0, 0, 0, 0.96)";
+          homeEraserContext.stroke();
+        }
+
+        const distance = fromPoint
+          ? Math.hypot(toPoint.x - fromPoint.x, toPoint.y - fromPoint.y)
+          : 0;
+        const steps = Math.max(1, Math.ceil(distance / (radius * 0.16)));
+
+        for (let step = 0; step <= steps; step += 1) {
+          const progress = step / steps;
+          const point = fromPoint
+            ? {
+                x: fromPoint.x + (toPoint.x - fromPoint.x) * progress,
+                y: fromPoint.y + (toPoint.y - fromPoint.y) * progress,
+              }
+            : toPoint;
+          eraseHomePoint(point, radius);
+        }
+
+        homeEraserContext.restore();
+      }
+
+      function handleHomeEraserMove(event) {
+        if (
+          !homePage ||
+          !homeEraserCanvas ||
+          !homeEraserContext ||
+          document.body.classList.contains("show-game")
+        ) {
+          return;
+        }
+
+        const homeBox = homePage.getBoundingClientRect();
+        const point = {
+          x: event.clientX - homeBox.left,
+          y: event.clientY - homeBox.top,
+        };
+        const radius = Math.max(64, Math.min(128, window.innerWidth * 0.075));
+        const shouldConnect =
+          lastEraserPoint &&
+          Math.hypot(point.x - lastEraserPoint.x, point.y - lastEraserPoint.y) <
+            radius * 5;
+
+        eraseHomeTrail(shouldConnect ? lastEraserPoint : null, point, radius);
+        lastEraserPoint = point;
+      }
 
       function showTerm() {
         const term = terms[termIndex];
@@ -2227,6 +2375,7 @@
 
       function showHome(targetId = "#home") {
         document.body.classList.remove("show-game");
+        scheduleHomeEraserResize();
         setActiveLink(document.querySelector(".nav-links .js-home-link"));
         window.setTimeout(() => {
           const target = document.querySelector(targetId);
@@ -2238,6 +2387,7 @@
 
       function showGame() {
         document.body.classList.add("show-game");
+        lastEraserPoint = null;
         setActiveLink(gameLink);
         window.scrollTo({ top: 0, behavior: "smooth" });
         window.setTimeout(moveBird, 0);
@@ -2424,6 +2574,25 @@
             closePhotoLightbox();
           }
         });
+      }
+
+      if (homePage && homeEraserCanvas && homeEraserContext) {
+        paintHomeEraserLayer();
+        homePage.addEventListener("pointermove", handleHomeEraserMove, {
+          passive: true,
+        });
+        homePage.addEventListener("pointerleave", () => {
+          lastEraserPoint = null;
+        });
+        window.addEventListener("resize", scheduleHomeEraserResize);
+        window.addEventListener("load", scheduleHomeEraserResize);
+
+        if ("ResizeObserver" in window) {
+          const homeEraserObserver = new ResizeObserver(
+            scheduleHomeEraserResize
+          );
+          homeEraserObserver.observe(homePage);
+        }
       }
 
       homeLinks.forEach((link) => {
